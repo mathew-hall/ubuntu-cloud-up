@@ -103,9 +103,17 @@ template.xml > "${DIR}/${NAME}.xml"
 
 say "Adding static IP assignment"
 
-virsh net-update --network default \
-add-last ip-dhcp-host \
---xml "<host mac='$MAC' name='$NAME' ip='$IP' />" --live --config  >/dev/null
+if virsh net-dumpxml default | grep "\($NAME\|$MAC\)" > /dev/null; then
+	#If macaddr or name already exists, modify the existing mapping
+	virsh net-update --network default \
+	modify ip-dhcp-host \
+	--xml "<host mac='$MAC' name='$NAME' ip='$IP' />" --live --config  >/dev/null
+else
+	virsh net-update --network default \
+	add-last ip-dhcp-host \
+	--xml "<host mac='$MAC' name='$NAME' ip='$IP' />" --live --config  >/dev/null	
+fi
+
 
 say "Creating and booting VM"
 
