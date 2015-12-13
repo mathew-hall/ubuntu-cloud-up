@@ -33,7 +33,7 @@ The script doesn't clean up after itself. Machines (and their images) can be saf
 
 ###Reusing machine names
 
-The script will break if machines with the same name are created. The script will refuse to create the machine if the disk image is found, but if you delete a machine and subsequently try to create another machine with the same name without deleting the host entries in the network configuration, the script will fail. To fix this, make sure the host entries are deleted (see previous point).
+The script will refuse to create the machine if the disk image is found. To create a new machine with an existing name, remove the disk image, either via `virt-manager` or rm the file in `/var/lib/libvirt/images/`.
 
 # Example
 
